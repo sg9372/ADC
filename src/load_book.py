@@ -8,6 +8,4 @@ def getRawText(file_path: str):
     for page in doc:
         text += page.get_text()
     doc.close()
-    return text
-
-
+    return text 
