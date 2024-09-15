@@ -8,15 +8,13 @@ def extract_words(raw_text):
     text = raw_text.lower()
     text = re.sub(r'[^\w\s]', '', text)
     text = re.sub(r'\s+', ' ', text).strip()
-    lemmatize(text)
-
-    
+    return lemmatize(text)
 
 def lemmatize(text):
     nlp = spacy.load("es_core_news_sm")
     doc = nlp(text)
-    lemmas = [token.lemma_ for token in doc]
-    sql_storage(lemmas)
+    lemmas = [token.lemma_ for token in doc if token.pos_ != 'PROPN']
+    return sql_storage(lemmas)
 
 def sql_storage(lemmas_list):
     sqlConnection = sqlite3.connect("spanishWords.db")
@@ -40,8 +38,8 @@ def sql_storage(lemmas_list):
                           "ON CONFLICT(word) DO UPDATE SET frequency = frequency + ?",
                           (word, frequency, frequency))
     
-    sqlCursor.execute("SELECT * FROM spanishWords")
-    for row in sqlCursor.fetchall():
-        print(row)
+    #sqlCursor.execute("SELECT * FROM spanishWords ORDER BY frequency ASC")
+    #for row in sqlCursor.fetchall():
+    #    print(row)
     
-    sqlConnection.close()
+    return sqlConnection
