@@ -6,7 +6,7 @@ def generate_cue_cards(database, deck_name, output_file):
     sqlCursor = database.cursor()
     
     deck = genanki.Deck(deck_id=1234567890, name=deck_name)
-    sqlCursor.execute("SELECT word, english FROM spanishWords ORDER BY frequency DESC")
+    sqlCursor.execute("SELECT word, english FROM originalWords ORDER BY frequency DESC")
     rows = sqlCursor.fetchall()
     nMostCommon = 1
 
@@ -27,6 +27,7 @@ def generate_cue_cards(database, deck_name, output_file):
 
 
     # Save the deck to a file
+    output_file = "./data/processed/" + output_file
     genanki.Package(deck).write_to_file(output_file)
 
     # Close the database connection

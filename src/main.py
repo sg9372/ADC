@@ -14,7 +14,7 @@ def main(pdf_path, sourceLang, deck_name):
         # Extract words
         print("Extracting words...")
         wordsDatabase = extract_words(text)
-        
+
         # Translate words
         print("Translating words...")
         translations = translate_words(wordsDatabase, sourceLang)
@@ -39,6 +39,7 @@ if __name__ == "__main__":
     deck_name = sys.argv[3]
     file_name = f"{deck_name}.apkg"
 
-    #python src/main.py "./data/raw/test_data.pdf" "ES" "test_deck"
+    #python src/main.py "./data/raw/test_data.pdf" "es" "test_deck"
+    #
 
     main(pdf_path, sourceLang, deck_name)

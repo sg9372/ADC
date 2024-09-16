@@ -17,11 +17,11 @@ def lemmatize(text):
     return sql_storage(lemmas)
 
 def sql_storage(lemmas_list):
-    sqlConnection = sqlite3.connect("spanishWords.db")
+    sqlConnection = sqlite3.connect("originalWords.db")
     sqlCursor = sqlConnection.cursor()
 
-    sqlCursor.execute("DROP TABLE IF EXISTS spanishWords")
-    sqlCursor.execute("CREATE TABLE IF NOT EXISTS spanishWords(word TEXT PRIMARY KEY, frequency INTEGER)")
+    sqlCursor.execute("DROP TABLE IF EXISTS originalWords")
+    sqlCursor.execute("CREATE TABLE IF NOT EXISTS originalWords(word TEXT PRIMARY KEY, frequency INTEGER)")
     # ~584 words per page
 
     word_count = {}
@@ -34,12 +34,12 @@ def sql_storage(lemmas_list):
             word_count[lemma] = 1
     
     for word, frequency in word_count.items():
-        sqlCursor.execute("INSERT INTO spanishWords(word, frequency) VALUES(?, ?) "
+        sqlCursor.execute("INSERT INTO originalWords(word, frequency) VALUES(?, ?) "
                           "ON CONFLICT(word) DO UPDATE SET frequency = frequency + ?",
                           (word, frequency, frequency))
     
-    #sqlCursor.execute("SELECT * FROM spanishWords ORDER BY frequency ASC")
-    #for row in sqlCursor.fetchall():
-    #    print(row)
+    sqlCursor.execute("SELECT COUNT(*) FROM originalWords")
+    result = sqlCursor.fetchone()
+    print(str(result[0]))
     
     return sqlConnection
