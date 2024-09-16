@@ -13,7 +13,7 @@ def extract_words(raw_text):
 def lemmatize(text):
     nlp = spacy.load("es_core_news_sm")
     doc = nlp(text)
-    lemmas = [token.lemma_ for token in doc if token.pos_ != 'PROPN']
+    lemmas = [token.lemma_ for token in doc if token.pos_ != ('PROPN') and token.is_alpha]
     return sql_storage(lemmas)
 
 def sql_storage(lemmas_list):

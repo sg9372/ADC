@@ -48,10 +48,10 @@ def translate_words(database, sourceLang):
 
     database.commit()
 
-    sqlCursor.execute("SELECT * FROM spanishWords ORDER BY frequency ASC")
-    for row in sqlCursor.fetchall():
-        print(row)
+    #sqlCursor.execute("SELECT * FROM spanishWords ORDER BY frequency ASC")
+    #for row in sqlCursor.fetchall():
+    #    print(row)
 
-    print(untranslatedWords)
+    #print(untranslatedWords)
 
-    database.close()
+    return database
