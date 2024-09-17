@@ -119,6 +119,16 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
+# Ignore sql databases.
+*.db
+*.sql
+
+# Ignore pdf's.
+*.pdf
+
+# Ignore Anki decks.
+*.apkg
+
 # Environments
 .env
 .venv
