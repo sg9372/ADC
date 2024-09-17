@@ -4,16 +4,17 @@
 #import deepl
 from deep_translator import GoogleTranslator
 
-def translate_words(database, sourceLang):
-    # Add English words column.
-    def addEnglishColumn(sqlConnection):    
-        sqlCursor = sqlConnection.cursor()
+# Add English words column.
+def addEnglishColumn(sqlConnection):    
+    sqlCursor = sqlConnection.cursor()
+    sqlCursor.execute("PRAGMA table_info(originalWords)")
+    columns = [column[1] for column in sqlCursor.fetchall()]
+    if 'english' not in columns:
         sqlCursor.execute("ALTER TABLE originalWords ADD COLUMN english TEXT")
         sqlConnection.commit()
+    return sqlConnection
 
-    addEnglishColumn(database)
-
-    #auth_key = "e9e3ce70-8257-4b23-83bd-d18047a89cab:fx"
+def translate_and_add_words(database, sourceLang):
     sqlCursor = database.cursor()
     sqlCursor.execute("SELECT word FROM originalWords WHERE english IS NULL")
     words = sqlCursor.fetchall()
@@ -50,13 +51,13 @@ def translate_words(database, sourceLang):
             else:
                 untranslatedWords.append(untranslated_word)
                 sqlCursor.execute("DELETE FROM originalWords WHERE word = ?", (untranslated_word,))
-            
-            
     database.commit()
+    print(untranslatedWords)
     return database
 
-    #sqlCursor.execute("SELECT * FROM originalWords ORDER BY frequency ASC")
-    #for row in sqlCursor.fetchall():
-    #    print(row)
+def translate_words(database, sourceLang):
+    database = addEnglishColumn(database)
+    database = translate_and_add_words(database, sourceLang)
+    return database
 
     
