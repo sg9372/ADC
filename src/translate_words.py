@@ -22,13 +22,13 @@ def translate_words(database, sourceLang):
 
     untranslatedWords = []
     i = 0
-    batch_size = 50
+    batch_size = 250
 
     while i < len(words):
         percentage = (i/len(words))*100
         print(str(percentage) + "%")
         
-        if i+50<len(words):
+        if i+batch_size<len(words):
             batch = [word_tuple[0] for word_tuple in words[i:i + batch_size]]
             i+=batch_size
         else:
@@ -50,8 +50,8 @@ def translate_words(database, sourceLang):
             else:
                 untranslatedWords.append(untranslated_word)
                 sqlCursor.execute("DELETE FROM originalWords WHERE word = ?", (untranslated_word,))
-
-    print(untranslatedWords)
+            
+            
     database.commit()
     return database
 

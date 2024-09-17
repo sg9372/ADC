@@ -4,17 +4,17 @@ import spacy
 import re
 import sqlite3
     
-def extract_words(raw_text):
+def tokenize(raw_text):
     text = raw_text.lower()
     text = re.sub(r'[^\w\s]', '', text)
     text = re.sub(r'\s+', ' ', text).strip()
-    return lemmatize(text)
+    return text
 
 def lemmatize(text):
     nlp = spacy.load("es_core_news_sm")
     doc = nlp(text)
     lemmas = [token.lemma_ for token in doc if token.pos_ != ('PROPN') and token.is_alpha]
-    return sql_storage(lemmas)
+    return lemmas
 
 def sql_storage(lemmas_list):
     sqlConnection = sqlite3.connect("originalWords.db")
@@ -35,11 +35,13 @@ def sql_storage(lemmas_list):
     
     for word, frequency in word_count.items():
         sqlCursor.execute("INSERT INTO originalWords(word, frequency) VALUES(?, ?) "
-                          "ON CONFLICT(word) DO UPDATE SET frequency = frequency + ?",
-                          (word, frequency, frequency))
+                        "ON CONFLICT(word) DO UPDATE SET frequency = frequency + ?",
+                        (word, frequency, frequency))
     
-    sqlCursor.execute("SELECT COUNT(*) FROM originalWords")
-    result = sqlCursor.fetchone()
-    print(str(result[0]))
-    
+    return sqlConnection
+
+def extract_words(raw_text):
+    tokens = tokenize(raw_text)
+    lemmas = lemmatize(tokens)
+    sqlConnection = sql_storage(lemmas)
     return sqlConnection

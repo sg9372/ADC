@@ -1,4 +1,4 @@
-# load_book.py: Handles loading and reading the book content.
+# load_file.py: Handles loading and reading the book content.
 
 import pymupdf
 

@@ -1,4 +1,4 @@
-from load_book import getRawText
+from load_file import getRawText
 from extract_words import extract_words
 from translate_words import translate_words
 from generate_cue_cards import generate_cue_cards
@@ -38,8 +38,5 @@ if __name__ == "__main__":
     sourceLang = sys.argv[2]
     deck_name = sys.argv[3]
     file_name = f"{deck_name}.apkg"
-
-    #python src/main.py "./data/raw/test_data.pdf" "es" "test_deck"
-    #
 
     main(pdf_path, sourceLang, deck_name)
