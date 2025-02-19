@@ -26,7 +26,7 @@ This project processes a Spanish PDF (later to add other foreign languages), ext
 
 3. Store desired pdf in "raw" folder. 
 
-4. To process a book and create Anki cards, run in termainl, for example:
+4. To process a book and create Anki cards, run in terminal, for example:
     python src/main.py "./data/raw/Harry-Potter-III.pdf" "es" "test_deck"
 
 5. On the Anki desktop App, select "import..." and navigate to 'your-repo/data/processed'
